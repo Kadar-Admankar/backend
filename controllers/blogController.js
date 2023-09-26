@@ -28,3 +28,20 @@ export const addBlog = async (req, res, next)=>{
       }
       return res.status(201).json({ blog })
 }
+
+export const updateBlog = async (req, res, next)=>{
+    const { title, description } = req.body
+    let blogId = req.params.id
+    let blog;
+    try {
+        blog = await Blog.findByIdAndUpdate(blogId, {
+            title,
+            description
+          })
+    } catch (error) {
+        console.log(error)
+    }
+    if(!blog){
+        
+    }
+}
