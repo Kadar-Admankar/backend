@@ -81,7 +81,7 @@ export const deleteBlog = async (req, res, next)=>{
     const id = req.params.id
     let blog
     try {
-        blog = await Blog.findByIdAndRemove(id).populate('user')
+        blog = await Blog.findByIdAndRemove(id).populate('users')
         await blog.user.blogs.pull(blog)
         await blog.user.save()
     } catch (error) {
@@ -91,4 +91,18 @@ export const deleteBlog = async (req, res, next)=>{
         return res.status(500).json({ message: "Unable to delete" })
     }
     return res.status(200).json({ message: " Successfully Deleted" })
+}
+
+export const gerByUserId = async (req, res, next)=>{
+     const userId = req.params.id
+     let userBlogs;
+     try {
+        userBlogs = await User.findById(userId).populate('blogs') 
+     } catch (error) {
+        console.log(error)
+     }
+     if(!userBlogs){
+        return res.status(404).jso({ message: "No blog found" })
+     }
+     return res.status(200).json({ blogs:userBlogs })
 }
